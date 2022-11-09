@@ -10,6 +10,7 @@ public class Main {
     public static long fileVersion;
 
     public static void main(String[] args) {
+        Trade trade = new Trade();
 
         try {
             File myObj = new File("SAMPLE_v3.dat");
@@ -27,7 +28,7 @@ public class Main {
                 String currentLine = myReader.nextLine();
                 String tag = currentLine.substring(0,5);
                 if (tag.contains("TRADE")) {
-                    System.out.println("This is a Trade structure");
+                    trade.extractTrade(currentLine);
                 } else if (tag.contains("EXTRD")) {
                     System.out.println("This is a Extended Trade structure");
                 } else if (tag.contains("FOOTR")) {
@@ -84,7 +85,7 @@ public class Main {
 
         if (fileCreatedOn.isAfter(LocalDateTime.now())) {
             System.out.println("An error occurred : Future file creation date is not allowed!!");
-            throw new RuntimeException();
+            //throw new RuntimeException();
         } else {
             System.out.println("File created on: "+fileCreatedOn);
         }
