@@ -61,13 +61,17 @@ public class Main {
         if(fileVersion==4 || fileVersion==5) {
             System.out.println("File version is: " + fileVersion);
         }else{
-            System.out.println("Unsupported file version!! " + fileVersion);
+            System.out.println("Unsupported file version: "+fileVersion+"!! Supports only version 4 or 5!");
         }
 
         String tmpDateTime = header.substring(9,26);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
         fileCreatedOn = LocalDateTime.parse(tmpDateTime, formatter);
         System.out.println("File created on: "+fileCreatedOn);
+
+        if(fileCreatedOn.isAfter(LocalDateTime.now())){
+            System.out.println("Future file creation date is found!!");
+        }
 
         if(fileVersion==5) {
             fileComment = header.substring(header.indexOf("}") + 1);
