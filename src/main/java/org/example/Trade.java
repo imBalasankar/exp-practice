@@ -3,6 +3,7 @@ package org.example;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -110,28 +111,29 @@ public class Trade {
 
         System.out.println("------------------TRADE----------------------");
 
+        //Set trade tag
         tr.setTradeTag(trade.substring(0,5));
         System.out.println("Tag is : "+tr.getTradeTag());
 
+        //Set trade date and time
         String tmpDateTime = trade.substring(5,22);
-
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
             tradeDateTime = LocalDateTime.parse(tmpDateTime, formatter);
-        } catch(Exception e) {
+            if (tradeDateTime.isAfter(LocalDateTime.now())) {
+                System.out.println("An error occurred : Future file creation date is not allowed!! Moving to the next line...");
+                return;
+            } else {
+                tr.setTradeDateTime(tradeDateTime);
+                System.out.println("Trade date and time is : "+tr.getTradeDateTime());
+            }
+        } catch(DateTimeParseException e) {
             System.out.println("An error occurred : Date and Time - Only numbers allowed!! Moving to the next line...");
             e.printStackTrace();
             return;
         }
 
-        if (tradeDateTime.isAfter(LocalDateTime.now())) {
-            System.out.println("An error occurred : Future file creation date is not allowed!! Moving to the next line...");
-            return;
-        } else {
-            tr.setTradeDateTime(tradeDateTime);
-            System.out.println("Trade date and time is : "+tr.getTradeDateTime());
-        }
-
+        //Set trade direction
         direction = trade.substring(22,23);
         if (direction.contentEquals("B") || direction.contentEquals("S")) {
             tr.setDirection(direction);
@@ -141,25 +143,27 @@ public class Trade {
             return;
         }
 
+        //Set trade item id
         itemId = trade.substring(23, 35);
-        Pattern pattern = Pattern.compile("[A-Z]+");
-        Matcher matcher = pattern.matcher(itemId.substring(0,3));
+        Pattern itemIdLeadPattern = Pattern.compile("[A-Z]+");
+        Matcher itemIdLeadMatcher = itemIdLeadPattern.matcher(itemId.substring(0,3));
 
-        Pattern pattern2 = Pattern.compile("[A-Z0-9]+");
-        Matcher matcher2 = pattern2.matcher(itemId.substring(3));
-        if (matcher.matches()) {
-            if (matcher2.matches()) {
+        Pattern itemIdTrailPattern = Pattern.compile("[A-Z0-9]+");
+        Matcher itemIdTrailMatcher = itemIdTrailPattern.matcher(itemId.substring(3));
+        if (itemIdLeadMatcher.matches()) {
+            if (itemIdTrailMatcher.matches()) {
                 tr.setItemId(itemId);
                 System.out.println("Item id is : "+tr.getItemId());
             } else {
-                System.out.println("Last 9 characters of the Item id is should be upper case letters or numbers!! Moving to the next line...");
+                System.out.println("Last 9 characters of the Item id should be upper case letters or numbers!! Moving to the next line...");
                 return;
             }
         } else {
-            System.out.println("First 3 characters of the Item id is should be upper case letters!! Moving to the next line...");
+            System.out.println("First 3 characters of the Item id should be upper case letters!! Moving to the next line...");
             return;
         }
 
+        //Set trade price
         String tmpPrice = "";
         tmpPrice = tmpPrice.concat(trade.substring(35,46) +"."+trade.substring(46,50));
         try {
@@ -175,6 +179,49 @@ public class Trade {
             return;
         }
 
+        //Set trade quantity
+        try {
+            quantity = Long.parseLong(trade.substring(50,61));
+            if(quantity<=0){
+                System.out.println("Quantity never be zero or negative!! Moving to the next line...");
+                return;
+            } else {
+                tr.setQuantity(quantity);
+                System.out.println("Quantity is: " + quantity);
+            }
+        } catch (Exception e) {
+            System.out.println("Quantity should only have numbers!! Moving to the next line...");
+            return;
+        }
+
+        //Set trade buyer
+        buyer = trade.substring(61,65);
+        Pattern buyerPattern = Pattern.compile("[A-Za-z0-9_]+");
+        Matcher buyerMatcher = buyerPattern.matcher(buyer);
+        if (buyerMatcher.matches()) {
+            tr.setBuyer(buyer);
+            System.out.println("Buyer is : "+tr.getBuyer());
+        } else {
+            System.out.println("Buyer id should contain letters, numbers, and underscore only!! Moving to the next line...");
+            return;
+        }
+
+        //Set trade seller
+        seller = trade.substring(65,69);
+        Pattern sellerPattern = Pattern.compile("[A-Za-z0-9_]+");
+        Matcher sellerMatcher = sellerPattern.matcher(seller);
+        if (sellerMatcher.matches()) {
+            tr.setSeller(seller);
+            System.out.println("Seller is : "+tr.getSeller());
+        } else {
+            System.out.println("Seller id should contain letters, numbers, and underscore only!! Moving to the next line...");
+            return;
+        }
+
+        //Set trade comment
+        tradeComment = trade.substring(69).trim();
+        tr.setTradeComment(tradeComment);
+        System.out.println("Trade comment is: "+tr.getTradeComment());
 
     }
 }
