@@ -12,6 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         Trade trade = new Trade();
+        ExtendedTrade extendedTrade = new ExtendedTrade();
 
         try {
             File myObj = new File("abc.txt");
@@ -32,7 +33,7 @@ public class Main {
                 if (tag.contains("TRADE")) {
                     trade.extractTrade(currentLine);
                 } else if (tag.contains("EXTRD")) {
-                    System.out.println("This is a Extended Trade structure");
+                    extendedTrade.extractTrade(currentLine);
                 } else if (tag.contains("FOOTR")) {
                     extractFooter(currentLine);
                     return;
@@ -73,9 +74,10 @@ public class Main {
                 System.out.println("Unsupported file version: "+fileVersion+"!! Supports only version 4 or 5!");
                 throw new RuntimeException();
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("An error occurred : File version - Only numbers allowed!!");
-            throw new NumberFormatException();
+            e.printStackTrace();
+            throw new RuntimeException();
         }
 
         //Store file creation date and time
