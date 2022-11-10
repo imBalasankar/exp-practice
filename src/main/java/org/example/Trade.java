@@ -3,6 +3,8 @@ package org.example;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Trade {
     private String tradeTag;
@@ -106,6 +108,8 @@ public class Trade {
         Trade tr = new Trade();
         //System.out.println(trade);
 
+        System.out.println("------------------TRADE----------------------");
+
         tr.setTradeTag(trade.substring(0,5));
         System.out.println("Tag is : "+tr.getTradeTag());
 
@@ -131,15 +135,47 @@ public class Trade {
         direction = trade.substring(22,23);
         if (direction.contentEquals("B") || direction.contentEquals("S")) {
             tr.setDirection(direction);
+            System.out.println("Direction is : "+tr.getDirection());
         } else {
             System.out.println("Direction should be B or S!! Moving to the next line...");
             return;
         }
 
+        itemId = trade.substring(23, 35);
+        Pattern pattern = Pattern.compile("[A-Z]+");
+        Matcher matcher = pattern.matcher(itemId.substring(0,3));
+
+        Pattern pattern2 = Pattern.compile("[A-Z0-9]+");
+        Matcher matcher2 = pattern2.matcher(itemId.substring(3));
+        if (matcher.matches()) {
+            if (matcher2.matches()) {
+                tr.setItemId(itemId);
+                System.out.println("Item id is : "+tr.getItemId());
+            } else {
+                System.out.println("Last 9 characters of the Item id is should be upper case letters or numbers!! Moving to the next line...");
+                return;
+            }
+        } else {
+            System.out.println("First 3 characters of the Item id is should be upper case letters!! Moving to the next line...");
+            return;
+        }
+
+        String tmpPrice = "";
+        tmpPrice = tmpPrice.concat(trade.substring(35,46) +"."+trade.substring(46,50));
+        try {
+            if (tmpPrice.substring(0, 1).contentEquals("+")) {
+                price = new BigDecimal(tmpPrice.substring(1));
+            } else  {
+                price = new BigDecimal(tmpPrice);
+            }
+            tr.setPrice(price);
+            System.out.println("Price is: " + price);
+        } catch (Exception e) {
+            System.out.println("Price should only have numbers!! Moving to the next line...");
+            return;
+        }
 
 
-
-        return;
     }
 }
 

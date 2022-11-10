@@ -13,7 +13,7 @@ public class Main {
         Trade trade = new Trade();
 
         try {
-            File myObj = new File("SAMPLE_v3.dat");
+            File myObj = new File("abc.txt");
             Scanner myReader = new Scanner(myObj);
             String header = myReader.nextLine();
 
@@ -34,11 +34,13 @@ public class Main {
                 } else if (tag.contains("FOOTR")) {
                     extractFooter(currentLine);
                     return;
-                } else if (!myReader.hasNextLine()) {
+                }  else {
+                    System.out.println("This structure is not recognized: "+tag);
+                }
+
+                if (!myReader.hasNextLine()) {
                     System.out.println("Footer is Mandatory!!");
                     throw new RuntimeException();
-                } else {
-                    System.out.println("This structure is not recognized: "+tag);
                 }
             }
 
@@ -54,6 +56,8 @@ public class Main {
         String headerTag;
         LocalDateTime fileCreatedOn;
         String fileComment;
+
+        System.out.println("---------------HEADER------------------------");
 
         headerTag = header.substring(0,5);
         System.out.println("Tag is : "+headerTag);
@@ -85,7 +89,7 @@ public class Main {
 
         if (fileCreatedOn.isAfter(LocalDateTime.now())) {
             System.out.println("An error occurred : Future file creation date is not allowed!!");
-            //throw new RuntimeException();
+            throw new RuntimeException();
         } else {
             System.out.println("File created on: "+fileCreatedOn);
         }
@@ -94,12 +98,16 @@ public class Main {
             fileComment = header.substring(header.indexOf("}") + 1).trim().replaceAll("^/+","").replaceAll("\\+$","");
             System.out.println("File comment is: " + fileComment);
         }
+
+
     }
 
     public static void extractFooter(String footer) {
         String footerTag;
         long noOfStructures;
         long noOfCharsInStructures;
+
+        System.out.println("------------------FOOTER----------------------");
 
         footerTag = footer.substring(0,5);
         System.out.println("Tag is : "+footerTag);
@@ -123,6 +131,7 @@ public class Main {
                 throw new RuntimeException();
             }
         }
+
     }
 
 }
