@@ -1,7 +1,7 @@
 package org.example;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -11,7 +11,7 @@ public class Main {
     public static long fileVersion;
 
     public static void main(String[] args) {
-        Trade trade = new Trade();
+        //Trade trade = new Trade();
         ExtendedTrade extendedTrade = new ExtendedTrade();
         long lineNumber = 0;
 
@@ -33,10 +33,8 @@ public class Main {
                 String currentLine = myReader.nextLine();
                 lineNumber++;
                 String tag = currentLine.substring(0,5);
-                if (tag.contains("TRADE")) {
-                    trade.extractTrade(currentLine, lineNumber);
-                } else if (tag.contains("EXTRD")) {
-                    extendedTrade.extractExtendedTrade(currentLine, lineNumber);
+                if (tag.contains("TRADE") || tag.contains("EXTRD")) {
+                    extendedTrade.passTrade(tag, currentLine, lineNumber);
                 } else if (tag.contains("FOOTR")) {
                     extractFooter(currentLine);
                     return;
@@ -51,9 +49,9 @@ public class Main {
                 }
             }
             myReader.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             System.out.println("An error occurred : File not found!!");
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -79,8 +77,7 @@ public class Main {
             }
         } catch (NumberFormatException e) {
             System.out.println("An error occurred : File version - Only numbers allowed!!");
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         //Store file creation date and time
@@ -96,8 +93,7 @@ public class Main {
             }
         } catch(DateTimeParseException e) {
             System.out.println("An error occurred : Date and Time - Only numbers allowed!!");
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         //Store file comment
@@ -125,8 +121,7 @@ public class Main {
             System.out.println("Number of TRADE and EXTRD structures is: "+noOfStructures);
         } catch (Exception e) {
             System.out.println("An error occurred : No of structures - Only numbers allowed!!");
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         //Store no of characters in trade and extended trade structures
@@ -136,8 +131,7 @@ public class Main {
                 System.out.println("Number of characters in TRADE and EXTRD structures is: " + noOfCharsInStructures);
             } catch (Exception e) {
                 System.out.println("An error occurred : No of characters in structures - Only numbers allowed!!");
-                e.printStackTrace();
-                throw new RuntimeException();
+                throw new RuntimeException(e);
             }
         }
 

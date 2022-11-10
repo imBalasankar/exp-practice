@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -92,9 +93,41 @@ public class Trade {
     public void setTradeComment(String tradeComment) {
         this.tradeComment = tradeComment;
     }
+}
 
-    public void extractTrade(String trade, long lineNo){
-        Trade tr = new Trade();
+class ExtendedTrade extends Trade{
+    private long version;
+    private String nestedTag;
+
+    public ExtendedTrade() {
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
+    }
+
+    public String getNestedTag() {
+        return nestedTag;
+    }
+
+    public void setNestedTag(String nestedTag) {
+        this.nestedTag = nestedTag;
+    }
+
+    public void passTrade(String tag, String trade, long lineNo) throws IOException {
+        if(tag.contentEquals("TRADE")){
+            extractTrade(trade, lineNo);
+        }else{
+            extractExtendedTrade(trade, lineNo);
+        }
+    }
+
+    public void extractTrade(String trade, long lineNo) {
+        ExtendedTrade tr = new ExtendedTrade();
 
         System.out.println("------------------TRADE----------------------");
 
@@ -209,32 +242,15 @@ public class Trade {
         tr.setTradeComment(tradeComment);
         System.out.println("Trade comment is: "+tr.getTradeComment());
 
+        CSVWriter csv = new CSVWriter();
+        try {
+            csv.createCSVFile(tr);
+        } catch (IOException e) {
+            System.out.println("Error occurred while creating CSV file!!");
+            throw new RuntimeException(e);
+        }
+
     }
-}
-
-class ExtendedTrade extends Trade{
-    private long version;
-    private String nestedTag;
-
-    public ExtendedTrade() {
-    }
-
-    public long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
-    public String getNestedTag() {
-        return nestedTag;
-    }
-
-    public void setNestedTag(String nestedTag) {
-        this.nestedTag = nestedTag;
-    }
-
     public void extractExtendedTrade(String trade, long lineNo){
         ExtendedTrade tr = new ExtendedTrade();
 
@@ -365,6 +381,14 @@ class ExtendedTrade extends Trade{
         nestedTag = trade.substring(76).trim();
         tr.setNestedTag(nestedTag);
         System.out.println("Nested tag is: "+tr.getNestedTag());
+
+        CSVWriter csv = new CSVWriter();
+        try {
+            csv.createCSVFile(tr);
+        } catch (IOException e) {
+            System.out.println("Error occurred while creating CSV file!!");
+            throw new RuntimeException(e);
+        }
 
     }
 }
