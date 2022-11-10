@@ -235,7 +235,7 @@ class ExtendedTrade extends Trade{
         this.nestedTag = nestedTag;
     }
 
-    public void extractTrade(String trade, long lineNo){
+    public void extractExtendedTrade(String trade, long lineNo){
         ExtendedTrade tr = new ExtendedTrade();
 
         System.out.println("-----------EXTENDED TRADE------------------");

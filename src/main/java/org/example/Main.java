@@ -36,7 +36,7 @@ public class Main {
                 if (tag.contains("TRADE")) {
                     trade.extractTrade(currentLine, lineNumber);
                 } else if (tag.contains("EXTRD")) {
-                    extendedTrade.extractTrade(currentLine, lineNumber);
+                    extendedTrade.extractExtendedTrade(currentLine, lineNumber);
                 } else if (tag.contains("FOOTR")) {
                     extractFooter(currentLine);
                     return;
