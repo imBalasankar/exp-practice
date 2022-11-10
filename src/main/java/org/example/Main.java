@@ -13,6 +13,7 @@ public class Main {
     public static void main(String[] args) {
         Trade trade = new Trade();
         ExtendedTrade extendedTrade = new ExtendedTrade();
+        long lineNumber = 0;
 
         try {
             File myObj = new File("abc.txt");
@@ -20,6 +21,7 @@ public class Main {
 
             //Read the first line and passing it to the extract header function
             String header = myReader.nextLine();
+            lineNumber++;
             if (header.substring(0,5).contains("HEADR")) {
                 extractHeader(header);
             } else {
@@ -29,11 +31,12 @@ public class Main {
 
             while (myReader.hasNextLine()) {
                 String currentLine = myReader.nextLine();
+                lineNumber++;
                 String tag = currentLine.substring(0,5);
                 if (tag.contains("TRADE")) {
-                    trade.extractTrade(currentLine);
+                    trade.extractTrade(currentLine, lineNumber);
                 } else if (tag.contains("EXTRD")) {
-                    extendedTrade.extractTrade(currentLine);
+                    extendedTrade.extractTrade(currentLine, lineNumber);
                 } else if (tag.contains("FOOTR")) {
                     extractFooter(currentLine);
                     return;

@@ -93,9 +93,8 @@ public class Trade {
         this.tradeComment = tradeComment;
     }
 
-    public void extractTrade(String trade){
+    public void extractTrade(String trade, long lineNo){
         Trade tr = new Trade();
-        //System.out.println(trade);
 
         System.out.println("------------------TRADE----------------------");
 
@@ -109,14 +108,14 @@ public class Trade {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
             tradeDateTime = LocalDateTime.parse(tmpDateTime, formatter);
             if (tradeDateTime.isAfter(LocalDateTime.now())) {
-                System.out.println("An error occurred : Future file creation date is not allowed!! Skipping this line...");
+                System.out.println("An error occurred in line number "+lineNo+" : Future file creation date is not allowed!! Skipping this line...");
                 return;
             } else {
                 tr.setTradeDateTime(tradeDateTime);
                 System.out.println("Trade date and time is : "+tr.getTradeDateTime());
             }
         } catch(DateTimeParseException e) {
-            System.out.println("An error occurred : Date and Time - Only numbers allowed!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Date and Time - Only numbers allowed!! Skipping this line...");
             return;
         }
 
@@ -126,7 +125,7 @@ public class Trade {
             tr.setDirection(direction);
             System.out.println("Direction is : "+tr.getDirection());
         } else {
-            System.out.println("Direction should be B or S!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Direction should be B or S!! Skipping this line...");
             return;
         }
 
@@ -142,11 +141,11 @@ public class Trade {
                 tr.setItemId(itemId);
                 System.out.println("Item id is : "+tr.getItemId());
             } else {
-                System.out.println("Last 9 characters of the Item id should be upper case letters or numbers!! Skipping this line...");
+                System.out.println("An error occurred in line number "+lineNo+" : Last 9 characters of the Item id should be upper case letters or numbers!! Skipping this line...");
                 return;
             }
         } else {
-            System.out.println("First 3 characters of the Item id should be upper case letters!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : First 3 characters of the Item id should be upper case letters!! Skipping this line...");
             return;
         }
 
@@ -162,7 +161,7 @@ public class Trade {
             tr.setPrice(price);
             System.out.println("Price is: " + tr.getPrice());
         } catch (Exception e) {
-            System.out.println("Price should only have numbers!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Price should only have numbers!! Skipping this line...");
             return;
         }
 
@@ -170,14 +169,14 @@ public class Trade {
         try {
             quantity = Long.parseLong(trade.substring(50,61));
             if(quantity<=0){
-                System.out.println("Quantity never be zero or negative!! Skipping this line...");
+                System.out.println("An error occurred in line number "+lineNo+" : Quantity never be zero or negative!! Skipping this line...");
                 return;
             } else {
                 tr.setQuantity(quantity);
                 System.out.println("Quantity is: " + tr.getQuantity());
             }
         } catch (Exception e) {
-            System.out.println("Quantity should only have numbers!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Quantity should only have numbers!! Skipping this line...");
             return;
         }
 
@@ -189,7 +188,7 @@ public class Trade {
             tr.setBuyer(buyer);
             System.out.println("Buyer is : "+tr.getBuyer());
         } else {
-            System.out.println("Buyer id should contain letters, numbers, and underscore only!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Buyer id should contain letters, numbers, and underscore only!! Skipping this line...");
             return;
         }
 
@@ -201,7 +200,7 @@ public class Trade {
             tr.setSeller(seller);
             System.out.println("Seller is : "+tr.getSeller());
         } else {
-            System.out.println("Seller id should contain letters, numbers, and underscore only!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Seller id should contain letters, numbers, and underscore only!! Skipping this line...");
             return;
         }
 
@@ -236,9 +235,8 @@ class ExtendedTrade extends Trade{
         this.nestedTag = nestedTag;
     }
 
-    public void extractTrade(String trade){
+    public void extractTrade(String trade, long lineNo){
         ExtendedTrade tr = new ExtendedTrade();
-        //System.out.println(trade);
 
         System.out.println("-----------EXTENDED TRADE------------------");
 
@@ -253,11 +251,11 @@ class ExtendedTrade extends Trade{
                 tr.setVersion(version);
                 System.out.println("Version is: " + tr.getVersion());
             } else {
-                System.out.println("Unsupported version: "+version+"!! Supports only version 1!");
+                System.out.println("An error occurred in line number "+lineNo+" : Unsupported version - Supports only version 1!! Skipping this line...");
                 return;
             }
         } catch (NumberFormatException e) {
-            System.out.println("An error occurred : Version - Only numbers allowed!!");
+            System.out.println("An error occurred in line number "+lineNo+" :  Version - Only numbers allowed!! Skipping this line...");
             return;
         }
 
@@ -267,14 +265,14 @@ class ExtendedTrade extends Trade{
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
             tradeDateTime = LocalDateTime.parse(tmpDateTime, formatter);
             if (tradeDateTime.isAfter(LocalDateTime.now())) {
-                System.out.println("An error occurred : Future file creation date is not allowed!! Skipping this line...");
+                System.out.println("An error occurred in line number "+lineNo+" : Future file creation date is not allowed!! Skipping this line...");
                 return;
             } else {
                 tr.setTradeDateTime(tradeDateTime);
                 System.out.println("Trade date and time is : "+tr.getTradeDateTime());
             }
         } catch(DateTimeParseException e) {
-            System.out.println("An error occurred : Date and Time - Only numbers allowed!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Date and Time - Only numbers allowed!! Skipping this line...");
             return;
         }
 
@@ -284,7 +282,7 @@ class ExtendedTrade extends Trade{
             tr.setDirection(direction);
             System.out.println("Direction is : "+tr.getDirection());
         } else {
-            System.out.println("Direction should be BUY_ or SELL!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Direction should be BUY_ or SELL!! Skipping this line...");
             return;
         }
 
@@ -300,11 +298,11 @@ class ExtendedTrade extends Trade{
                 tr.setItemId(itemId);
                 System.out.println("Item id is : "+tr.getItemId());
             } else {
-                System.out.println("Last 9 characters of the Item id should be upper case letters or numbers!! Skipping this line...");
+                System.out.println("An error occurred in line number "+lineNo+" : Last 9 characters of the Item id should be upper case letters or numbers!! Skipping this line...");
                 return;
             }
         } else {
-            System.out.println("First 3 characters of the Item id should be upper case letters!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : First 3 characters of the Item id should be upper case letters!! Skipping this line...");
             return;
         }
 
@@ -320,7 +318,7 @@ class ExtendedTrade extends Trade{
             tr.setPrice(price);
             System.out.println("Price is: " + price);
         } catch (Exception e) {
-            System.out.println("Price should only have numbers!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Price should only have numbers!! Skipping this line...");
             return;
         }
 
@@ -328,14 +326,14 @@ class ExtendedTrade extends Trade{
         try {
             quantity = Long.parseLong(trade.substring(57,68));
             if(quantity<=0){
-                System.out.println("Quantity never be zero or negative!! Skipping this line...");
+                System.out.println("An error occurred in line number "+lineNo+" : Quantity never be zero or negative!! Skipping this line...");
                 return;
             } else {
                 tr.setQuantity(quantity);
                 System.out.println("Quantity is: " + quantity);
             }
         } catch (Exception e) {
-            System.out.println("Quantity should only have numbers!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Quantity should only have numbers!! Skipping this line...");
             return;
         }
 
@@ -347,7 +345,7 @@ class ExtendedTrade extends Trade{
             tr.setBuyer(buyer);
             System.out.println("Buyer is : "+tr.getBuyer());
         } else {
-            System.out.println("Buyer id should contain letters, numbers, and underscore only!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Buyer id should contain letters, numbers, and underscore only!! Skipping this line...");
             return;
         }
 
@@ -359,7 +357,7 @@ class ExtendedTrade extends Trade{
             tr.setSeller(seller);
             System.out.println("Seller is : "+tr.getSeller());
         } else {
-            System.out.println("Seller id should contain letters, numbers, and underscore only!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Seller id should contain letters, numbers, and underscore only!! Skipping this line...");
             return;
         }
 
