@@ -128,6 +128,17 @@ public class Trade {
             System.out.println("Trade date and time is : "+tr.getTradeDateTime());
         }
 
+        direction = trade.substring(22,23);
+        if (direction.contentEquals("B") || direction.contentEquals("S")) {
+            tr.setDirection(direction);
+        } else {
+            System.out.println("Direction should be B or S!! Moving to the next line...");
+            return;
+        }
+
+
+
+
         return;
     }
 }

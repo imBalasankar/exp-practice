@@ -91,7 +91,7 @@ public class Main {
         }
 
         if (fileVersion==5) {
-            fileComment = header.substring(header.indexOf("}") + 1);
+            fileComment = header.substring(header.indexOf("}") + 1).trim().replaceAll("^/+","").replaceAll("\\+$","");
             System.out.println("File comment is: " + fileComment);
         }
     }
