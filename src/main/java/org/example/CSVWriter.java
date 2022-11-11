@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVWriter {
+    //Writing the Trade CSV
     public void createCSVFile(ArrayList<ExtendedTrade> etrd) {
         String version;
 
@@ -34,6 +35,7 @@ public class CSVWriter {
         }
     }
 
+    //Writing the Header CSV
     public void createHeaderCSVFile(List<String> headerList) {
 
         try {
@@ -48,6 +50,7 @@ public class CSVWriter {
         }
     }
 
+    //Writing the Footer CSV
     public void createFooterCSVFile(List<String> footerList) {
 
         try {

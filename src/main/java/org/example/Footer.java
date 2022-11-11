@@ -44,6 +44,7 @@ public class Footer {
 
     }
 
+    //Passing the footer arraylist to write it on the CSV
     public void writeFooterCSV() {
         CSVWriter csvWriter = new CSVWriter();
         csvWriter.createFooterCSVFile(footerList);

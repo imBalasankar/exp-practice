@@ -63,6 +63,7 @@ public class Header {
         headerList.add(fileComment);
     }
 
+    //Passing the header arraylist to write it on the CSV
     public void writeHeaderCSV() {
         CSVWriter csvWriter = new CSVWriter();
         csvWriter.createHeaderCSVFile(headerList);

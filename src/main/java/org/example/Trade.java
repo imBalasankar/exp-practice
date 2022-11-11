@@ -424,6 +424,7 @@ class ExtendedTrade extends Trade{
         tradeList.add(extr);
     }
 
+    //Passing the trade arraylist to write it on the CSV
     public void writeCSV() {
         CSVWriter csvWriter = new CSVWriter();
         tradeList.sort(Comparator.comparing(ExtendedTrade::getVolume).reversed());
