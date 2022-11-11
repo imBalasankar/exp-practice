@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -425,6 +426,8 @@ class ExtendedTrade extends Trade{
 
     public void writeCSV() {
         CSVWriter csvWriter = new CSVWriter();
+        tradeList.sort(Comparator.comparing(ExtendedTrade::getVolume).reversed());
         csvWriter.createCSVFile(tradeList);
     }
+
 }
