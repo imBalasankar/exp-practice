@@ -27,11 +27,11 @@ public class Header {
             if (fileVersion==4 || fileVersion==5) {
                 System.out.println("File version is: " + fileVersion);
             } else {
-                System.out.println("Unsupported file version: "+fileVersion+"!! Supports only version 4 or 5!");
+                System.out.println("Unsupported file version in Header: "+fileVersion+"!! Supports only version 4 or 5!");
                 throw new RuntimeException();
             }
         } catch (NumberFormatException e) {
-            System.out.println("An error occurred : File version - Only numbers allowed!!");
+            System.out.println("An error occurred in Header: File version - Only numbers allowed!!");
             throw new RuntimeException(e);
         }
 
@@ -41,13 +41,13 @@ public class Header {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
             fileCreatedOn = LocalDateTime.parse(tmpDateTime, formatter);
             if (fileCreatedOn.isAfter(LocalDateTime.now())) {
-                System.out.println("An error occurred : Future file creation date is not allowed!!");
+                System.out.println("An error occurred in Header: Future file creation date is not allowed!!");
                 throw new RuntimeException();
             } else {
                 System.out.println("File created on: "+fileCreatedOn);
             }
         } catch(DateTimeParseException e) {
-            System.out.println("An error occurred : Date and Time - Only numbers allowed!!");
+            System.out.println("An error occurred in Header: Date and Time - Only numbers allowed!!");
             throw new RuntimeException(e);
         }
 

@@ -1,7 +1,6 @@
 package org.example;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -14,7 +13,10 @@ public class Main {
         long lineNumber = 0;
 
         try {
-            File myObj = new File("sample.txt");
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Input filename: ");
+            String fileName = scanner.nextLine();
+            File myObj = new File(fileName);
             Scanner myReader = new Scanner(myObj);
 
             //Read the first line and passing it to the extract header function
@@ -51,8 +53,8 @@ public class Main {
                 }
             }
             myReader.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred : File not found!!");
+        } catch (Exception e) {
+            System.out.println("A fatal error occurred!! Check either file name is correct or file is not blank");
             throw new RuntimeException(e);
         }
     }
