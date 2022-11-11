@@ -14,7 +14,7 @@ public class CSVWriter {
 
         try {
             FileWriter out = new FileWriter("trade.csv");
-            CSVPrinter printer = new CSVPrinter(out, CSVFormat.Builder.create().setHeader("Tag", "Version", "Trade date and time", "Direction", "Item id", "Price", "Quantity", "Buyer", "Seller", "Trade comment", "Nested tag").build());
+            CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.builder().setHeader("Tag", "Version", "Trade date and time", "Direction", "Item id", "Price", "Quantity", "Buyer", "Seller", "Trade comment", "Nested tag").build());
 
           for ( ExtendedTrade etr : etrd) {
               if (etr.getVersion()==0) {
@@ -38,8 +38,22 @@ public class CSVWriter {
 
         try {
             FileWriter out = new FileWriter("header.csv");
-            CSVPrinter printer = new CSVPrinter(out, CSVFormat.Builder.create().setHeader("Tag", "File Version", "File created date and time", "File comment").build());
+            CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.builder().setHeader("Tag", "File Version", "File created date and time", "File comment").build());
             printer.printRecord(headerList);
+            printer.flush();
+            out.close();
+        } catch (IOException e){
+            System.out.println("Error occurred while creating CSV file!!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void createFooterCSVFile(List<String> footerList) {
+
+        try {
+            FileWriter out = new FileWriter("footer.csv");
+            CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.builder().setHeader("Tag", "Number of TRADE and EXTRD structures", "Number of characters in TRADE and EXTRD structures").build());
+            printer.printRecord(footerList);
             printer.flush();
             out.close();
         } catch (IOException e){

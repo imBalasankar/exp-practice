@@ -38,6 +38,7 @@ public class Main {
                 } else if (tag.contains("FOOTR")) {
                     footer.extractFooter(currentLine, fileVersion);
                     extendedTrade.writeCSV();
+                    footer.writeFooterCSV();
                     return;
                 }  else {
                     System.out.println("This structure is not recognized: "+tag);

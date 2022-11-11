@@ -1,10 +1,14 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Footer {
+    List<String> footerList = new ArrayList<>();
     public void extractFooter(String footer, long fileVersion) {
         String footerTag;
         long noOfStructures;
-        long noOfCharsInStructures;
+        long noOfCharsInStructures=0;
 
         System.out.println("------------------FOOTER----------------------");
 
@@ -32,5 +36,16 @@ public class Footer {
             }
         }
 
+        footerList.add(footerTag);
+        footerList.add(String.valueOf(noOfStructures));
+        if (noOfCharsInStructures != 0) {
+            footerList.add(String.valueOf(noOfCharsInStructures));
+        }
+
+    }
+
+    public void writeFooterCSV() {
+        CSVWriter csvWriter = new CSVWriter();
+        csvWriter.createFooterCSVFile(footerList);
     }
 }
