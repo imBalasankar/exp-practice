@@ -25,10 +25,6 @@ public class Trade {
     public Trade() {
     }
 
-    public long getId() {
-        return id;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -140,6 +136,7 @@ class ExtendedTrade extends Trade{
         this.nestedTag = nestedTag;
     }
 
+    //Check the tag and pass it to the relevant structure
     public void passTrade(String tag, String trade, long lineNo) {
         if(tag.contentEquals("TRADE")){
             extractTrade(trade, lineNo);
@@ -148,6 +145,7 @@ class ExtendedTrade extends Trade{
         }
     }
 
+    //Extracting Trade details
     public void extractTrade(String trade, long lineNo) {
         ExtendedTrade tr = new ExtendedTrade();
 
@@ -272,13 +270,13 @@ class ExtendedTrade extends Trade{
         //Set trade id if everything is successfully set
         id = ++tmpId;
         tr.setId(id);
-        System.out.println("Trade id is: "+tr.getId());
 
         //Add trade to the list
         tradeList.add(tr);
 
     }
 
+    //Extracting Extended Trade details
     public void extractExtendedTrade(String trade, long lineNo){
         ExtendedTrade extr = new ExtendedTrade();
 
@@ -418,7 +416,6 @@ class ExtendedTrade extends Trade{
         //Set extended trade id if everything is successfully set
         id = ++tmpId;
         extr.setId(id);
-        System.out.println("Trade id is: "+extr.getId());
 
         //Add extended trade to the list
         tradeList.add(extr);
