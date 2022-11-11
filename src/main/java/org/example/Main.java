@@ -11,12 +11,11 @@ public class Main {
     public static long fileVersion;
 
     public static void main(String[] args) {
-        //Trade trade = new Trade();
         ExtendedTrade extendedTrade = new ExtendedTrade();
         long lineNumber = 0;
 
         try {
-            File myObj = new File("abc.txt");
+            File myObj = new File("sample.txt");
             Scanner myReader = new Scanner(myObj);
 
             //Read the first line and passing it to the extract header function
@@ -37,6 +36,7 @@ public class Main {
                     extendedTrade.passTrade(tag, currentLine, lineNumber);
                 } else if (tag.contains("FOOTR")) {
                     extractFooter(currentLine);
+                    extendedTrade.writeCSV();
                     return;
                 }  else {
                     System.out.println("This structure is not recognized: "+tag);

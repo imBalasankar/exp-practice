@@ -422,4 +422,9 @@ class ExtendedTrade extends Trade{
         //Add extended trade to the list
         tradeList.add(extr);
     }
+
+    public void writeCSV() {
+        CSVWriter csvWriter = new CSVWriter();
+        csvWriter.createCSVFile(tradeList);
+    }
 }
