@@ -4,10 +4,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Trade {
+    protected long id;
+    protected BigDecimal volume;
     protected String tradeTag;
     protected LocalDateTime tradeDateTime;
     protected String direction;
@@ -19,6 +22,22 @@ public class Trade {
     protected String tradeComment;
 
     public Trade() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public BigDecimal getVolume() {
+        return volume;
+    }
+
+    public void setVolume(BigDecimal volume) {
+        this.volume = volume;
     }
 
     public String getTradeTag() {
@@ -96,7 +115,7 @@ public class Trade {
 
 class ExtendedTrade extends Trade{
     private long version;
-    private String nestedTag;
+    private String nestedTag ="";
 
     public ExtendedTrade() {
     }
@@ -112,6 +131,9 @@ class ExtendedTrade extends Trade{
     public String getNestedTag() {
         return nestedTag;
     }
+
+    long tmpId = 0;
+    ArrayList<ExtendedTrade> tradeList = new ArrayList<>();
 
     public void setNestedTag(String nestedTag) {
         this.nestedTag = nestedTag;
@@ -212,6 +234,11 @@ class ExtendedTrade extends Trade{
             return;
         }
 
+        //Set trade volume
+        volume = price.multiply(BigDecimal.valueOf(quantity));
+        tr.setVolume(volume);
+        System.out.println("Trade volume is: " + tr.getVolume());
+
         //Set trade buyer
         buyer = trade.substring(61,65);
         Pattern buyerPattern = Pattern.compile("[A-Za-z0-9_]+");
@@ -241,8 +268,13 @@ class ExtendedTrade extends Trade{
         tr.setTradeComment(tradeComment);
         System.out.println("Trade comment is: "+tr.getTradeComment());
 
-        CSVWriter csv = new CSVWriter();
-        csv.createCSVFile(tr);
+        //Set trade id if everything is successfully set
+        id = ++tmpId;
+        tr.setId(id);
+        System.out.println("Trade id is: "+tr.getId());
+
+        //Add trade to the list
+        tradeList.add(tr);
 
     }
 
@@ -348,6 +380,11 @@ class ExtendedTrade extends Trade{
             return;
         }
 
+        //Set extended trade volume
+        volume = price.multiply(BigDecimal.valueOf(quantity));
+        extr.setVolume(volume);
+        System.out.println("Trade volume is: " + extr.getVolume());
+
         //Set extended trade buyer
         buyer = trade.substring(68,72);
         Pattern buyerPattern = Pattern.compile("[A-Za-z0-9_]+");
@@ -377,7 +414,12 @@ class ExtendedTrade extends Trade{
         extr.setNestedTag(nestedTag);
         System.out.println("Nested tag is: "+ extr.getNestedTag());
 
-        CSVWriter csv = new CSVWriter();
-        csv.createCSVFile(extr);
+        //Set extended trade id if everything is successfully set
+        id = ++tmpId;
+        extr.setId(id);
+        System.out.println("Trade id is: "+extr.getId());
+
+        //Add extended trade to the list
+        tradeList.add(extr);
     }
 }
