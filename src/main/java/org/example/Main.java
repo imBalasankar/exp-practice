@@ -27,7 +27,7 @@ public class Main {
                 header.writeHeaderCSV();
                 fileVersion = Long.parseLong(headerLine.substring(5,9));
             } else {
-                System.out.println("Header is Mandatory!!");
+                System.out.println("A fatal error occurred!! Header is Mandatory!");
                 throw new RuntimeException();
             }
 
@@ -43,18 +43,19 @@ public class Main {
                     footer.writeFooterCSV();
                     return;
                 }  else {
-                    System.out.println("This structure is not recognized: "+tag);
+                    System.out.println("A fatal error occurred!! This structure is not recognized: "+tag);
+                    throw new RuntimeException();
                 }
 
                 //Stop the application if the footer is missing
                 if (!myReader.hasNextLine()) {
-                    System.out.println("Footer is Mandatory!!");
+                    System.out.println("A fatal error occurred!! Footer is Mandatory!");
                     throw new RuntimeException();
                 }
             }
             myReader.close();
         } catch (Exception e) {
-            System.out.println("A fatal error occurred!! Check either file name is correct or file is not blank");
+            System.out.println("A fatal error occurred!! Check either file name is correct or file is not blank!");
             throw new RuntimeException(e);
         }
     }

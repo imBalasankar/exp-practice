@@ -21,7 +21,7 @@ public class Footer {
             noOfStructures = Long.parseLong(footer.substring(5, 15));
             System.out.println("Number of TRADE and EXTRD structures is: "+noOfStructures);
         } catch (Exception e) {
-            System.out.println("An error occurred in footer: No of structures - Only numbers allowed!!");
+            System.out.println("A fatal error occurred in Footer!! No of structures - Only numbers allowed!");
             throw new RuntimeException(e);
         }
 
@@ -31,7 +31,7 @@ public class Footer {
                 noOfCharsInStructures = Long.parseLong(footer.substring(15, 25));
                 System.out.println("Number of characters in TRADE and EXTRD structures is: " + noOfCharsInStructures);
             } catch (Exception e) {
-                System.out.println("An error occurred in footer: No of characters in structures - Only numbers allowed!!");
+                System.out.println("A fatal error occurred in Footer!! No of characters in structures - Only numbers allowed!");
                 throw new RuntimeException(e);
             }
         }

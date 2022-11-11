@@ -194,11 +194,11 @@ class ExtendedTrade extends Trade{
                 tr.setItemId(itemId);
                 System.out.println("Item id is : "+tr.getItemId());
             } else {
-                System.out.println("An error occurred in line number "+lineNo+" : Last 9 characters of the Item id should be upper case letters or numbers!! Skipping this line...");
+                System.out.println("An error occurred in line number "+lineNo+" : Last 9 characters of the Item id should be uppercase letters or numbers!! Skipping this line...");
                 return;
             }
         } else {
-            System.out.println("An error occurred in line number "+lineNo+" : First 3 characters of the Item id should be upper case letters!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : First 3 characters of the Item id should be uppercase letters!! Skipping this line...");
             return;
         }
 
@@ -297,7 +297,7 @@ class ExtendedTrade extends Trade{
                 return;
             }
         } catch (NumberFormatException e) {
-            System.out.println("An error occurred in line number "+lineNo+" :  Version - Only numbers allowed!! Skipping this line...");
+            System.out.println("An error occurred in line number "+lineNo+" : Version - Only numbers allowed!! Skipping this line...");
             return;
         }
 

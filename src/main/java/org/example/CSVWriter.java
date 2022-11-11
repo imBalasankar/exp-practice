@@ -30,7 +30,7 @@ public class CSVWriter {
             printer.flush();
             out.close();
         } catch (IOException e){
-            System.out.println("Error occurred while creating CSV file!!");
+            System.out.println("A fatal error occurred while creating the CSV file!!");
             throw new RuntimeException(e);
         }
     }
@@ -45,7 +45,7 @@ public class CSVWriter {
             printer.flush();
             out.close();
         } catch (IOException e){
-            System.out.println("Error occurred while creating CSV file!!");
+            System.out.println("A fatal error occurred while creating the CSV file!!");
             throw new RuntimeException(e);
         }
     }
@@ -60,7 +60,7 @@ public class CSVWriter {
             printer.flush();
             out.close();
         } catch (IOException e){
-            System.out.println("Error occurred while creating CSV file!!");
+            System.out.println("A fatal error occurred while creating the CSV file!!");
             throw new RuntimeException(e);
         }
     }
