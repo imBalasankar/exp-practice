@@ -1,6 +1,5 @@
 package org.example;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -118,7 +117,7 @@ class ExtendedTrade extends Trade{
         this.nestedTag = nestedTag;
     }
 
-    public void passTrade(String tag, String trade, long lineNo) throws IOException {
+    public void passTrade(String tag, String trade, long lineNo) {
         if(tag.contentEquals("TRADE")){
             extractTrade(trade, lineNo);
         }else{
@@ -243,29 +242,25 @@ class ExtendedTrade extends Trade{
         System.out.println("Trade comment is: "+tr.getTradeComment());
 
         CSVWriter csv = new CSVWriter();
-        try {
-            csv.createCSVFile(tr);
-        } catch (IOException e) {
-            System.out.println("Error occurred while creating CSV file!!");
-            throw new RuntimeException(e);
-        }
+        csv.createCSVFile(tr);
 
     }
+
     public void extractExtendedTrade(String trade, long lineNo){
-        ExtendedTrade tr = new ExtendedTrade();
+        ExtendedTrade extr = new ExtendedTrade();
 
         System.out.println("-----------EXTENDED TRADE------------------");
 
         //Set extended trade tag
-        tr.setTradeTag(trade.substring(0,5));
-        System.out.println("Tag is : "+tr.getTradeTag());
+        extr.setTradeTag(trade.substring(0,5));
+        System.out.println("Tag is : "+ extr.getTradeTag());
 
         //Set extended trade version
         try {
             version = Long.parseLong(trade.substring(5, 9));
             if (version==1) {
-                tr.setVersion(version);
-                System.out.println("Version is: " + tr.getVersion());
+                extr.setVersion(version);
+                System.out.println("Version is: " + extr.getVersion());
             } else {
                 System.out.println("An error occurred in line number "+lineNo+" : Unsupported version - Supports only version 1!! Skipping this line...");
                 return;
@@ -284,8 +279,8 @@ class ExtendedTrade extends Trade{
                 System.out.println("An error occurred in line number "+lineNo+" : Future file creation date is not allowed!! Skipping this line...");
                 return;
             } else {
-                tr.setTradeDateTime(tradeDateTime);
-                System.out.println("Trade date and time is : "+tr.getTradeDateTime());
+                extr.setTradeDateTime(tradeDateTime);
+                System.out.println("Trade date and time is : "+ extr.getTradeDateTime());
             }
         } catch(DateTimeParseException e) {
             System.out.println("An error occurred in line number "+lineNo+" : Date and Time - Only numbers allowed!! Skipping this line...");
@@ -295,8 +290,8 @@ class ExtendedTrade extends Trade{
         //Set extended trade direction
         direction = trade.substring(26,30);
         if (direction.contentEquals("BUY_") || direction.contentEquals("SELL")) {
-            tr.setDirection(direction);
-            System.out.println("Direction is : "+tr.getDirection());
+            extr.setDirection(direction);
+            System.out.println("Direction is : "+ extr.getDirection());
         } else {
             System.out.println("An error occurred in line number "+lineNo+" : Direction should be BUY_ or SELL!! Skipping this line...");
             return;
@@ -311,8 +306,8 @@ class ExtendedTrade extends Trade{
         Matcher itemIdTrailMatcher = itemIdTrailPattern.matcher(itemId.substring(3));
         if (itemIdLeadMatcher.matches()) {
             if (itemIdTrailMatcher.matches()) {
-                tr.setItemId(itemId);
-                System.out.println("Item id is : "+tr.getItemId());
+                extr.setItemId(itemId);
+                System.out.println("Item id is : "+ extr.getItemId());
             } else {
                 System.out.println("An error occurred in line number "+lineNo+" : Last 9 characters of the Item id should be upper case letters or numbers!! Skipping this line...");
                 return;
@@ -331,7 +326,7 @@ class ExtendedTrade extends Trade{
             } else  {
                 price = new BigDecimal(tmpPrice);
             }
-            tr.setPrice(price);
+            extr.setPrice(price);
             System.out.println("Price is: " + price);
         } catch (Exception e) {
             System.out.println("An error occurred in line number "+lineNo+" : Price should only have numbers!! Skipping this line...");
@@ -345,7 +340,7 @@ class ExtendedTrade extends Trade{
                 System.out.println("An error occurred in line number "+lineNo+" : Quantity never be zero or negative!! Skipping this line...");
                 return;
             } else {
-                tr.setQuantity(quantity);
+                extr.setQuantity(quantity);
                 System.out.println("Quantity is: " + quantity);
             }
         } catch (Exception e) {
@@ -358,8 +353,8 @@ class ExtendedTrade extends Trade{
         Pattern buyerPattern = Pattern.compile("[A-Za-z0-9_]+");
         Matcher buyerMatcher = buyerPattern.matcher(buyer);
         if (buyerMatcher.matches()) {
-            tr.setBuyer(buyer);
-            System.out.println("Buyer is : "+tr.getBuyer());
+            extr.setBuyer(buyer);
+            System.out.println("Buyer is : "+ extr.getBuyer());
         } else {
             System.out.println("An error occurred in line number "+lineNo+" : Buyer id should contain letters, numbers, and underscore only!! Skipping this line...");
             return;
@@ -370,8 +365,8 @@ class ExtendedTrade extends Trade{
         Pattern sellerPattern = Pattern.compile("[A-Za-z0-9_]+");
         Matcher sellerMatcher = sellerPattern.matcher(seller);
         if (sellerMatcher.matches()) {
-            tr.setSeller(seller);
-            System.out.println("Seller is : "+tr.getSeller());
+            extr.setSeller(seller);
+            System.out.println("Seller is : "+ extr.getSeller());
         } else {
             System.out.println("An error occurred in line number "+lineNo+" : Seller id should contain letters, numbers, and underscore only!! Skipping this line...");
             return;
@@ -379,16 +374,10 @@ class ExtendedTrade extends Trade{
 
         //Set extended trade nested tag
         nestedTag = trade.substring(76).trim();
-        tr.setNestedTag(nestedTag);
-        System.out.println("Nested tag is: "+tr.getNestedTag());
+        extr.setNestedTag(nestedTag);
+        System.out.println("Nested tag is: "+ extr.getNestedTag());
 
         CSVWriter csv = new CSVWriter();
-        try {
-            csv.createCSVFile(tr);
-        } catch (IOException e) {
-            System.out.println("Error occurred while creating CSV file!!");
-            throw new RuntimeException(e);
-        }
-
+        csv.createCSVFile(extr);
     }
 }
